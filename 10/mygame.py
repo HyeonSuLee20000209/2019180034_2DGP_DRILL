@@ -10,4 +10,3 @@ pico2d.open_canvas()
 # game_framework.run(item_state)
 game_framework.run(play_state)
 pico2d.clear_canvas()
-q
