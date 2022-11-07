@@ -23,7 +23,17 @@ class Bird:
         self.change_frame = False
 
     def update(self):
-        self.frame_x = (self.frame_x + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 5
+        if self.frame_y > 0:
+            if self.frame_x + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time > 5:
+                if self.frame_y == 2:
+                    self.frame_y = 1
+                elif self.frame_y == 1:
+                    self.frame_y = 0
+            self.frame_x = (self.frame_x + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 5
+        elif self.frame_y == 0:
+            if self.frame_x + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time > 4:
+                self.frame_y = 2
+            self.frame_x = (self.frame_x + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
         self.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
         self.x = clamp(0 + 25, self.x, 1400 - 25)
 
@@ -34,7 +44,9 @@ class Bird:
 
     def draw(self):
         if self.dir == -1:
-            self.image.clip_composite_draw(int(self.frame_x) * 180, int(self.frame_y) * 169, 180, 169, 0, 'h', self.x, self.y, 50, 50)
+            self.image.clip_composite_draw(int(self.frame_x) * 180, int(self.frame_y) * 169, 180, 169,
+                                           0, 'h',
+                                           self.x, self.y, 50, 50)
         elif self.dir == 1:
             self.image.clip_draw(int(self.frame_x) * 180, int(self.frame_y) * 169, 180, 169, self.x, self.y, 50, 50)
 
